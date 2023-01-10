@@ -24,6 +24,7 @@ const idMember = $('#idMember');
 const modal = $('.modal');
 const closeModal = $('.closeModal');
 const btnOpenModal = $('#myBtn');
+const wranning = $('.wranning');
 let totalItem = $('#totalItem');
 let totalPages = $('.totalPage');
 
@@ -95,13 +96,13 @@ function renderPerson(person) {
 renderPerson(EMPLOYEES)
  totalItem.innerText = EMPLOYEES.length;
 
-
+const emmployees = structuredClone(EMPLOYEES);
  // perpage
 function recordPage(arrayMember){
     record.addEventListener('change',()=>{
         idPage = 1
         getCurrentPage(idPage);
-       renderPerson(EMPLOYEES);
+       renderPerson(searchUser());
     })
 }
 recordPage(EMPLOYEES)
@@ -141,7 +142,7 @@ nextButton.addEventListener('click', () => {
     // perPage = record.value;
     //totalPage = Math.ceil(EMPLOYEES.length/perPage)
     prevButton.classList.remove('disabled')
-    if (idPage > totalPage) {
+    if (idPage >= totalPage) {
         idPage = totalPage;
         nextButton.classList.add('disabled');
     }
@@ -164,7 +165,7 @@ nextButton.addEventListener('click', () => {
 prevButton.addEventListener('click', () => {
     idPage--;
     nextButton.classList.remove('disabled');
-    if (idPage <= 0) {
+    if (idPage <= 1) {
         idPage = 1;
         prevButton.classList.add('disabled')
     }
@@ -191,35 +192,6 @@ showSearch.addEventListener('click', () => {
 })
 closeFilter.addEventListener('click', () => {
     filterSort.style.display = 'none';
-})
-
-
-sortAToZ.addEventListener('click', () => {
-    const datas = EMPLOYEES.sort((data1, data2) => {
-        let nameA = data1.name.trim().split(" ");
-        let nameB = data2.name.trim().split(" ");
-        const lastLengthNameA = nameA[nameA.length - 1].toLocaleLowerCase();
-        const lastLengthNameB = nameB[nameB.length - 1].toLocaleLowerCase();
-        if (loc_xoa_dau(lastLengthNameA).charCodeAt() < loc_xoa_dau(lastLengthNameB).charCodeAt()) {
-            return -1;
-        }
-        else { return 1 }
-    })
-    renderPerson(datas)
-})
-sortZToA.addEventListener('click', () => {
-
-    const datas = EMPLOYEES.sort((data1, data2) => {
-        let nameA = data1.name.trim().split(" ");
-        let nameB = data2.name.trim().split(" ");
-        const lastLengthNameA = nameA[nameA.length - 1].toLocaleLowerCase();
-        const lastLengthNameB = nameB[nameB.length - 1].toLocaleLowerCase();
-        if (loc_xoa_dau(lastLengthNameA).charCodeAt() > loc_xoa_dau(lastLengthNameB).charCodeAt()) {
-            return -1;
-        }
-        else { return 1 }
-    })
-    renderPerson(datas)
 })
 
 // find max id member
@@ -294,9 +266,10 @@ nameMember.addEventListener('change', () => {
         else {
             emailMember.value = result;
         }
+        wranning.innerText = '';
     }
     else {
-        alert('Name Khong duoc de dau cach');
+        wranning.innerText = 'Tên người dùng không được để trống, không có số và không có ký tự đặc biệt!';
     }
 
 })
@@ -304,14 +277,14 @@ function containsNumber(str) {
     return /\d/.test(str);
 }
 function isAlphanumeric(str) {
-    return /^[0-9a-zA-Z]+$/.test(str);
+    return  /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(str);
 }
 let max = maxIdMember(EMPLOYEES);
 addMember.addEventListener('click', () => {
     max++;
     const getNameMember = nameMember.value;
     if (getNameMember != null && getNameMember != '' &&
-        containsNumber(getNameMember) == false && isAlphanumeric(getNameMember) == true) {
+        containsNumber(getNameMember) == false && isAlphanumeric(getNameMember) == false) {
         const getEmailMember = emailMember.value;
         idMember.value = max.toString();
         const getJobMember = jobMember.value;
@@ -327,15 +300,52 @@ addMember.addEventListener('click', () => {
         jobMember.value = '';
         renderPerson(EMPLOYEES);
         totalItem.innerText = EMPLOYEES.length;
+        wranning.innerText = '';
     }
     else {
         nameMember.value = '';
         emailMember.value = '';
         jobMember.value = '';
-        alert('Input ko de trong, ko co so va ko co ky tu dac biet')
+        wranning.innerText = 'Tên người dùng không được để trống, không có số và không có ký tự đặc biệt!';
     }
 
 })
 
+// filter
+function arrayRoot(){
+    renderPerson([...EMPLOYEES]);
+}
+closeFilter.addEventListener('click', ()=>{
+    totalItem.innerText = EMPLOYEES.length;
+   return arrayRoot();
+})
+
+sortAToZ.addEventListener('click', () => {
+    const datas = [...EMPLOYEES].sort((data1, data2) => {
+        let nameA = data1.name.replace(/[0-9]/g, '').trim().split(" ");
+        let nameB = data2.name.replace(/[0-9]/g, '').trim().split(" ");
+        const lastLengthNameA = nameA[nameA.length - 1].toLocaleLowerCase();
+        const lastLengthNameB = nameB[nameB.length - 1].toLocaleLowerCase();
+        if (loc_xoa_dau(lastLengthNameA).charCodeAt() < loc_xoa_dau(lastLengthNameB).charCodeAt()) {
+            return -1;
+        }
+        else { return 1 }
+    })
+    renderPerson(datas)
+})
+sortZToA.addEventListener('click', () => {
+
+    const datas = [...EMPLOYEES].sort((data1, data2) => {
+        let nameA = data1.name.replace(/[0-9]/g, '').trim().split(" ");
+        let nameB = data2.name.replace(/[0-9]/g, '').trim().split(" ");
+        const lastLengthNameA = nameA[nameA.length - 1].toLocaleLowerCase();
+        const lastLengthNameB = nameB[nameB.length - 1].toLocaleLowerCase();
+        if (loc_xoa_dau(lastLengthNameA).charCodeAt() > loc_xoa_dau(lastLengthNameB).charCodeAt()) {
+            return -1;
+        }
+        else { return 1 }
+    })
+    renderPerson(datas)
+})
 
 

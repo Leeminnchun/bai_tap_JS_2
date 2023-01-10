@@ -281,7 +281,7 @@ a{
     height: 360px;
     background-color: #fefefe;
     margin: auto;
-    padding: 50px;
+    padding: 20px 50px 50px 50px;
     border: 1px solid #888;
     width: 40%;
   }
@@ -306,6 +306,8 @@ a{
     float: right;
     font-size: 28px;
     font-weight: bold;
+    margin: 0px 0px 10px 0px;
+    text-align: right;
   }
   
   .closeModal:hover,
@@ -324,4 +326,10 @@ a{
   }
   #myBtn:hover{
     background-color: #bebdee;
+  }
+
+  .wranning{
+    color: rgb(233, 105, 105);
+    padding-left: 10px;
+    font-size: 13px;
   }

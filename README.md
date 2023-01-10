@@ -1,5 +1,5 @@
 # exercises-html-css-js
-
+https://leeminnchun.github.io/bai_tap_JS_2/
 ## Branch naming convention
 `fresher/[your_prefix_ntq_email]`
 
